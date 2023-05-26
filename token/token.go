@@ -1,5 +1,9 @@
 package token
 
+// what a token is actually stored as
+// could be a int or byte for perf
+type TokenType string
+
 const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
@@ -26,14 +30,26 @@ const (
 	LET      = "LET"
 )
 
-// what a token is actually stored as
-// could be a int or byte for perf
-type TokenType string
-
 // struct for holding a token
 // contains token type and
 // literal value
 type Token struct {
 	Type    TokenType
 	Literal string
+}
+
+// chosen keywords to be reserved by
+// the interpreter
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+// checks whether the given identifier
+// is one of the reserved keywords
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT
 }
